@@ -13,7 +13,6 @@
       ➕ Create New Puzzle
     </button>
 
-    <!-- Hint Image -->
     <div *ngIf="puzzle.originalImageUrl" class="hint">
       <h4 class="fw-bold">Hint (Original Image)</h4>
       <img [src]="puzzle.originalImageUrl" alt="Original"
@@ -22,7 +21,6 @@
            (contextmenu)="$event.preventDefault()">
     </div>
 
-    <!-- Difficulty -->
     <div class="difficulty-row">
       <label>
         <input type="radio" name="difficulty" value="Easy" [(ngModel)]="difficulty" (change)="onDifficultyChange()">
@@ -38,14 +36,12 @@
       </label>
     </div>
 
-    <!-- Controls -->
     <div class="controls">
       <button class="btn btn-success" *ngIf="!showIndices" (click)="showIndices = true">🔢 Show Index</button>
       <button class="btn btn-warning" *ngIf="showIndices" (click)="showIndices = false">❌ Hide Index</button>
       <button class="btn btn-info" (click)="shuffleTiles()">🔀 Shuffle</button>
     </div>
 
-    <!-- Puzzle Solved -->
     <div *ngIf="isSolved()" class="solved-banner text-center">
       🎉 Puzzle Solved! Great Job 🎉
       <br>
@@ -53,7 +49,6 @@
     </div>
   </div>
 
-  <!-- ✅ Right Column (Puzzle Grid) -->
   <div class="puzzle-right">
     <div class="puzzle-grid"
          [style.grid-template-columns]="'repeat(' + puzzle.cols + ', 1fr)'"

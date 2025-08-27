@@ -39,6 +39,7 @@
 }
 
 .hint-img {
+  min-width: 200px;
   max-width: 350px;
   border-radius: 8px;
   border: 2px solid #ccc;
@@ -46,7 +47,6 @@
 }
 
 .puzzle-grid {
-  // height: 500px;
   display: grid;
   gap: 6px;
   padding: 10px;
@@ -204,7 +204,6 @@
 }
 
 .puzzle-stats {
-  margin: 5px;
   display: flex;
   justify-content: center;
   gap: 2rem;
