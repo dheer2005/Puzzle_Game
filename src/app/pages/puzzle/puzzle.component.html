@@ -83,4 +83,42 @@
       </div>
     </div>
   </div>
+
+
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Create New Puzzle</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <form #puzzleForm="ngForm" (ngSubmit)="onSubmit(puzzleForm)">
+              <div class="mb-3">
+                <label for="rows" class="form-label">Rows * Columns</label>
+                <select id="rows" class="form-select" name="rows" [(ngModel)]="newPuzzle.rows" required>
+                  <option *ngFor="let n of sizes" [value]="n">{{n}}</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="image" class="form-label">Upload Image</label>
+                <input type="file" id="image" class="form-control" (change)="onFileSelected($event)" accept="image/*" #fileInput required>
+              </div>
+
+              <div *ngIf="previewUrl" class="mb-3">
+                <p>Image Preview:</p>
+                <img [src]="previewUrl" alt="Preview" class="img-fluid rounded shadow">
+              </div>
+
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!puzzleForm.valid || !selectedFile">
+                Create Puzzle
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
