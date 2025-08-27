@@ -119,7 +119,6 @@ export class PuzzleComponent implements OnInit {
           console.log(puzzle);
         this.puzzle = puzzle;
         this.tiles = [...puzzle.tiles];
-        // this.tiles.push(null);
         this.emptyIndex = this.tiles.length - 1;
         this.shuffleTiles();
         this.isLoading = false;
@@ -134,20 +133,19 @@ export class PuzzleComponent implements OnInit {
   shuffleTiles() {
     if (!this.puzzle) return;
 
-    //start solved state
-    // this.tiles = [...this.puzzle.tiles, null];
     this.tiles = [...this.puzzle.tiles];
     this.emptyIndex = this.tiles.length - 1;
+    var moves = 200;
+    if(this.puzzle.cols >= 5){
+      moves = 2000;
+    }
 
-    const moves = 200;
     for(let i = 0; i < moves; i++){
       const neighbors = this.getNeighbors(this.emptyIndex);
       const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
       [this.tiles[this.emptyIndex], this.tiles[randomNeighbor]] = [this.tiles[randomNeighbor], this.tiles[this.emptyIndex]];
       this.emptyIndex = randomNeighbor;
     }
-    
-    console.log("Shuffled Tiles (without empty)", this.tiles);
   }
 
   getNeighbors(index: number): number[] {
