@@ -10,8 +10,8 @@ export class PuzzleService {
 
   constructor(private http: HttpClient) { }
 
-  getRandomPuzzleId(){
-    return this.http.get(`${this.apiUrl}randomPuzzleId`);
+  getRandomPuzzleIdByDifficulty(difficulty: string){
+    return this.http.get(`${this.apiUrl}getRandomByDifficulty/${difficulty}`);
   }
 
   createPuzzle(data: any){

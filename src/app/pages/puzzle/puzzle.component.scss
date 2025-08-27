@@ -16,12 +16,11 @@
 
 .puzzle-layout {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-start;
   gap: 2rem;
 }
 
-/* ✅ Left Column (Button + Hint) */
 .puzzle-left {
   display: flex;
   flex-direction: column;
@@ -29,7 +28,6 @@
   gap: 1.2rem;
 }
 
-/* Hint section */
 .hint {
   text-align: center;
 }
@@ -47,7 +45,6 @@
   box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
 }
 
-/* ✅ Right Column (Puzzle Grid) */
 .puzzle-grid {
   display: grid;
   gap: 6px;
@@ -60,7 +57,7 @@
 }
 
 .puzzle-grid:hover {
-  transform: scale(1.02);
+  transform: scale(1.0);
 }
 
 .tile {
@@ -100,7 +97,6 @@
   border-radius: 8px;
 }
 
-/* ✅ Button */
 .btn-new-puzzle {
   padding: 10px 20px;
   font-size: 16px;
@@ -131,7 +127,7 @@
 
 @keyframes pulse {
   from { transform: scale(1); }
-  to { transform: scale(1.08); }
+  to { transform: scale(1.01); }
 }
 
 .spinner-overlay {
@@ -204,4 +200,88 @@
     max-width: 90%;
     height: auto;
   }
+}
+
+.puzzle-stats {
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  padding: 10px 25px;
+  border-radius: 12px;
+  background: #eaffea;
+  border: 2px solid #4caf50;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  font-weight: bold;
+}
+
+.puzzle-stats .highlight {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* Controls (Show index + Shuffle) */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.controls button {
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  transform: scale(1.05);
+}
+
+/* Difficulty Row */
+.difficulty-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.difficulty-row label {
+  position: relative;
+  cursor: pointer;
+}
+
+.difficulty-row input[type="radio"] {
+  display: none;
+}
+
+.difficulty-row span {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  color: #333;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.difficulty-row input[type="radio"]:checked + span {
+  background: #4caf50;
+  color: #fff;
+  border-color: #388e3c;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.difficulty-row span:hover {
+  background: #d8f5d8;
+}
+
+.puzzle-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

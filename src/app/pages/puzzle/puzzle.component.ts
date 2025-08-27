@@ -27,25 +27,29 @@ export class PuzzleComponent implements OnInit {
 
   puzzle: Puzzle | any = null;
   sizes: number[] = Array.from({length: 9}, (_,i) => i+2);
-
   selectedFile: File| null = null;
   previewUrl: string | ArrayBuffer | null = null;
-
-  newPuzzle = {
-    rows: 2
-  };
-
-
   puzzleId?: string;
   tiles: (PuzzleTile | null)[] = []; 
   emptyIndex = -1;
   isLoading: boolean = false;
   showIndices: boolean = false;
+  difficulty: string = localStorage.getItem('difficulty') || 'Easy';
+  timer: any = null;
+  elapsedTime: number = 0;
+  timerStarted: boolean = false;
+  moveCount: number = 0;
+  newPuzzle = { rows: 2 };
+  
 
   constructor(private puzzleSvc: PuzzleService) { }
 
   ngOnInit(): void {
-    this.puzzleSvc.getRandomPuzzleId().subscribe({
+    this.loadPuzzleByDifficulty();
+  }
+
+  loadPuzzleByDifficulty(){
+    this.puzzleSvc.getRandomPuzzleIdByDifficulty(this.difficulty).subscribe({
       next: (res:any)=>{
         this.puzzleId = res;
         this.loadPuzzle();
@@ -53,11 +57,22 @@ export class PuzzleComponent implements OnInit {
       error: (err)=>{
         console.log(err);
       }
-    })
+    });
+  }
+
+  get formattedTime() : string{
+    const mins = Math.floor(this.elapsedTime / 60);
+    const secs = this.elapsedTime % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
   toggleIndices(){
     this.showIndices = !this.showIndices;
+  }
+
+  onDifficultyChange() {
+    localStorage.setItem('difficulty', this.difficulty);
+    this.loadPuzzleByDifficulty();
   }
 
   onFileSelected(event: Event){
@@ -92,7 +107,6 @@ export class PuzzleComponent implements OnInit {
         this.emptyIndex = this.tiles.length - 1;
         this.shuffleTiles();
 
-        // Reset modal state
         this.newPuzzle = { rows: 2 };
         this.selectedFile = null;
         if(this.fileInputRef){
@@ -164,10 +178,31 @@ export class PuzzleComponent implements OnInit {
 
   moveTile(index: number){
     if(this.canMove(index)){
+      if(!this.timerStarted){
+        this.timerStarted = true;
+        this.startTimer();
+      }
       [this.tiles[index], this.tiles[this.emptyIndex]] = [this.tiles[this.emptyIndex], this.tiles[index]];
       this.emptyIndex = index;
+      this.moveCount++;
+      if(this.isSolved()){
+        this.stopTimer();
+      }
     }
   }
+
+  startTimer(){
+    this.elapsedTime = 0;
+    this.timer = setInterval(() => {
+      this.elapsedTime++;
+    }, 1000);
+  }
+
+  stopTimer(){
+    clearInterval(this.timer);
+    this.timerStarted = false;
+  }
+
 
   canMove(index: number): boolean{
     if(!this.puzzle) return false;
@@ -188,7 +223,11 @@ export class PuzzleComponent implements OnInit {
 
   restartGame() {
     if (!this.puzzle) return;
+    this.moveCount = 0;
     this.shuffleTiles();
+    this.stopTimer();
+    this.elapsedTime = 0;
+    this.timerStarted = false;
   }
 
 }

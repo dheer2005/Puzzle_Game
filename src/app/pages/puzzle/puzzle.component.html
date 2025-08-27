@@ -1,45 +1,68 @@
-<div *ngIf="isLoading" class="spinner-overlay">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+<h2 class="title text-center">🧩 Sliding Puzzle Game</h2>
+
+<!-- Stats Panel -->
+<div class="puzzle-stats">
+  <div>⏱ Time: <span class="highlight">{{ formattedTime }}</span></div>
+  <div>🎯 Moves: <span class="highlight">{{ moveCount }}</span></div>
 </div>
 
-<div *ngIf="puzzle && !isLoading" class="puzzle-container">
-  <h2 class="title text-center">🧩 Sliding Puzzle Game</h2>
+<div class="puzzle-layout">
+  <!-- ✅ Left Column -->
+  <div class="puzzle-left">
+    <button class="btn-new-puzzle fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      ➕ Create New Puzzle
+    </button>
 
-  <div class="puzzle-layout">
-    <div class="puzzle-left">
-      <button class="btn-new-puzzle fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">➕ Create New Puzzle</button>
-
-      <div *ngIf="puzzle.originalImageUrl" class="hint">
-        <h4 class="fw-bold">Hint (Original Image)</h4>
-        <img [src]="puzzle.originalImageUrl" alt="Original"
-             class="hint-img"
-             draggable="false"
-             (contextmenu)="$event.preventDefault()">
-      </div>
-
-      <div class="index-toggle mb-3">
-        <button class="btn btn-sm btn-primary fw-bold" *ngIf="!showIndices" (click)="showIndices = true">Show Index</button>
-        <button class="btn btn-sm btn-secondary fw-bold" *ngIf="showIndices" (click)="showIndices = false">Remove Index</button>
-      </div>
-
-      <div *ngIf="isSolved()" class="solved-banner text-center">
-        🎉 Puzzle Solved! Great Job 🎉
-        <br>
-        <button class="btn btn-success mt-3 fw-bold" (click)="restartGame()">🔄 Restart Game</button>
-      </div>
+    <!-- Hint Image -->
+    <div *ngIf="puzzle.originalImageUrl" class="hint">
+      <h4 class="fw-bold">Hint (Original Image)</h4>
+      <img [src]="puzzle.originalImageUrl" alt="Original"
+           class="hint-img"
+           draggable="false"
+           (contextmenu)="$event.preventDefault()">
     </div>
 
+    <!-- Difficulty -->
+    <div class="difficulty-row">
+      <label>
+        <input type="radio" name="difficulty" value="Easy" [(ngModel)]="difficulty" (change)="onDifficultyChange()">
+        <span>Easy</span>
+      </label>
+      <label>
+        <input type="radio" name="difficulty" value="Medium" [(ngModel)]="difficulty" (change)="onDifficultyChange()">
+        <span>Medium</span>
+      </label>
+      <label>
+        <input type="radio" name="difficulty" value="Hard" [(ngModel)]="difficulty" (change)="onDifficultyChange()">
+        <span>Hard</span>
+      </label>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-success" *ngIf="!showIndices" (click)="showIndices = true">🔢 Show Index</button>
+      <button class="btn btn-warning" *ngIf="showIndices" (click)="showIndices = false">❌ Hide Index</button>
+      <button class="btn btn-info" (click)="shuffleTiles()">🔀 Shuffle</button>
+    </div>
+
+    <!-- Puzzle Solved -->
+    <div *ngIf="isSolved()" class="solved-banner text-center">
+      🎉 Puzzle Solved! Great Job 🎉
+      <br>
+      <button class="btn btn-success mt-3 fw-bold" (click)="restartGame()">🔄 Restart Game</button>
+    </div>
+  </div>
+
+  <!-- ✅ Right Column (Puzzle Grid) -->
+  <div class="puzzle-right">
     <div class="puzzle-grid"
-     [style.grid-template-columns]="'repeat(' + puzzle.cols + ', 1fr)'"
-     [style.grid-template-rows]="'repeat(' + puzzle.rows + ', 1fr)'">
+         [style.grid-template-columns]="'repeat(' + puzzle.cols + ', 1fr)'"
+         [style.grid-template-rows]="'repeat(' + puzzle.rows + ', 1fr)'">
 
       <div *ngFor="let tile of tiles; let i = index"
-          class="tile"
-          (click)="!isSolved() && moveTile(i)"
-          [class.disabled]="isSolved()">
-          
+           class="tile"
+           (click)="!isSolved() && moveTile(i)"
+           [class.disabled]="isSolved()">
 
         <ng-container *ngIf="i === emptyIndex && !isSolved(); else showTile">
           <div class="empty-tile"></div>
@@ -48,53 +71,15 @@
         <ng-template #showTile>
           <div class="tile-wrapper">
             <img [src]="tile?.url"
-                [alt]="'Tile ' + tile?.index"
-                draggable="false"
-                (contextmenu)="$event.preventDefault()">
+                 [alt]="'Tile ' + tile?.index"
+                 draggable="false"
+                 (contextmenu)="$event.preventDefault()">
 
             <span *ngIf="showIndices" class="tile-index">
               {{ tile!.index + 1 }}
             </span>
           </div>
         </ng-template>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Create New Puzzle</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="container mt-4">
-            <form #puzzleForm="ngForm" (ngSubmit)="onSubmit(puzzleForm)">
-              <div class="mb-3">
-                <label for="rows" class="form-label">Rows * Columns</label>
-                <select id="rows" class="form-select" name="rows" [(ngModel)]="newPuzzle.rows" required>
-                  <option *ngFor="let n of sizes" [value]="n">{{n}}</option>
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label for="image" class="form-label">Upload Image</label>
-                <input type="file" id="image" class="form-control" (change)="onFileSelected($event)" accept="image/*" #fileInput required>
-              </div>
-
-              <div *ngIf="previewUrl" class="mb-3">
-                <p>Image Preview:</p>
-                <img [src]="previewUrl" alt="Preview" class="img-fluid rounded shadow">
-              </div>
-
-              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="!puzzleForm.valid || !selectedFile">
-                Create Puzzle
-              </button>
-            </form>
-          </div>
-        </div>
       </div>
     </div>
   </div>
