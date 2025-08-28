@@ -109,7 +109,7 @@ export class PuzzleComponent implements OnInit {
 
         if(this.newPuzzle.rows <= 3){
           this.difficulty = 'Easy';
-        }else if(this.newPuzzle.rows <= 5){
+        }else if(this.newPuzzle.rows <= 7){
           this.difficulty = 'Medium';
         }else{
           this.difficulty = 'Hard';
