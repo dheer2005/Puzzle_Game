@@ -146,6 +146,7 @@ export class PuzzleComponent implements OnInit {
 
   shuffleTiles() {
     if (!this.puzzle) return;
+    this.moveCount = 0;
     this.stopTimer();
     this.elapsedTime = 0;
     this.timerStarted = false

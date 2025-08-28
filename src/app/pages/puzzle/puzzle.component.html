@@ -1,13 +1,11 @@
 <h2 class="title text-center">🧩 Sliding Puzzle Game</h2>
 
-<!-- Stats Panel -->
 <div class="puzzle-stats">
   <div>⏱ Time: <span class="highlight">{{ formattedTime }}</span></div>
   <div>🎯 Moves: <span class="highlight">{{ moveCount }}</span></div>
 </div>
 
 <div class="puzzle-layout">
-  <!-- ✅ Left Column -->
   <div class="puzzle-left">
     <button class="btn-new-puzzle fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
       ➕ Create New Puzzle
@@ -42,7 +40,7 @@
       <button class="btn btn-info" (click)="shuffleTiles()">🔀 Shuffle</button>
     </div>
 
-    <div *ngIf="isSolved()" class="solved-banner text-center">
+    <div *ngIf="isSolved()" class="solved-banner text-center mb-3">
       🎉 Puzzle Solved! Great Job 🎉
       <br>
       <button class="btn btn-success mt-3 fw-bold" (click)="restartGame()">🔄 Restart Game</button>

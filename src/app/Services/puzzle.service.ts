@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class PuzzleService {
-  // apiUrl: any= `https://localhost:7118/api/Puzzle/`;
-  apiUrl: any= `https://puzzle.bsite.net/api/Puzzle/`;
+  apiUrl: any= `https://localhost:7118/api/Puzzle/`;
+  // apiUrl: any= `https://puzzle.bsite.net/api/Puzzle/`;
 
   constructor(private http: HttpClient) { }
 
