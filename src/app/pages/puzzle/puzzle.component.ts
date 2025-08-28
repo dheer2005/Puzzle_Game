@@ -107,6 +107,16 @@ export class PuzzleComponent implements OnInit {
         this.emptyIndex = this.tiles.length - 1;
         this.shuffleTiles();
 
+        if(this.newPuzzle.rows <= 3){
+          this.difficulty = 'Easy';
+        }else if(this.newPuzzle.rows <= 5){
+          this.difficulty = 'Medium';
+        }else{
+          this.difficulty = 'Hard';
+        }
+
+        localStorage.setItem("difficulty", this.difficulty);
+
         this.newPuzzle = { rows: 2 };
         this.selectedFile = null;
         if(this.fileInputRef){
